@@ -28,10 +28,50 @@
         </figure>
         <!-- Post content-->
         <section class="mb-5">
-          <p class="fs-5 mb-4">
             <p>{{single_blog.short_description}}</p>
             <p>{{single_blog.blog_body}}</p>
-          </p>
+          
+            <!-- Comments -->
+             <h4>Commets({{comments_count}})</h4>
+             
+             {% if comments %}
+              
+              {% for comment in comments %}
+                <div class="card mt-1">
+                  <div class="card-body ">
+                    <p class="card-text mb-0">
+                      {{comment}}
+                    </p>
+                    <span>
+                      <small>By {{comment.user}}</small>
+                      <small>| {{comment.created_at | timesince}} ago</small>
+                    </span>
+                  </div>
+                </div>
+              {% endfor %}
+                
+             {% else %}
+              No Comments yet
+             {% endif %}
+             <br>
+             
+             {% if user.is_authenticated %}
+              <div class="form-group">
+              <form method="POST">
+                {% csrf_token %}
+                <div class="form-group">
+                  <textarea name="comment" class="form-control"cols="30" rows="10" placeholder="Leave a comment."></textarea>
+                  <input type="submit" class="btn btn-primary mt-1">
+                </div>
+              </form>
+             </div>
+             {% else %}
+             <div>
+              <h4>Please <a href="{% url 'login' %}">login</a> to write a comment!</h4>
+             </div>
+             {% endif %}
+              
+              
         </section>
       </article>
     </div>
